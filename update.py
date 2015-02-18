@@ -30,18 +30,16 @@ URL_LIST = (
 OUTPUT_PATH = '/var/ftp/maintenance/prefix-update/acl-115'
 
 HEADER = '''
-; This file was generated automatically
-; at {date_time}
+; This file was generated automatically at {date_time}
 ;
-; File contains elements for the extended ACL {acl_name} which were
-; downloaded from:
-{url_list}
+; File contains elements for the extended ACL {acl_name} which were downloaded from:
+;     {url_list}
 ;
 ; Bug-report: kostya.vinogradov@gmail.com
 
 no ip access-list extended {acl_name}
 ip access-list extended {acl_name}
-'''.format(date_time=datetime.now().strftime('%c'), acl_name=ACL_NAME, url_list='\n'.join(URL_LIST))
+'''.format(date_time=datetime.now().strftime('%c'), acl_name=ACL_NAME, url_list='\n;     '.join(URL_LIST))
 
 NETWORK_TEMPLATE = '''
  permit ip {net1} {net2}
