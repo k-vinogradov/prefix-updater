@@ -212,7 +212,7 @@ def load_prefixes(url):
     try:
         f = urllib2.urlopen(r).read()
     except urllib2.HTTPError as e:
-        log('Prefix-list download error: {0}'.format(e.reason))
+        log('Prefix-list download error - {0}'.format(e.__str__()))
         return result
     regexp = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,3}')
     for line in f.split('\n'):
