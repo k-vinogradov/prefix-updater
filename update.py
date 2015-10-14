@@ -1,5 +1,6 @@
 import urllib2
 import re
+import os
 from datetime import datetime
 from ipcalc import Network
 
@@ -10,9 +11,9 @@ OWN_NETWORKS = (
     '46.166.64.0/18',
     '46.182.128.0/21',
     '80.240.32.0/20',
-    '89.105.128.0/21',
+    #'89.105.128.0/21',
     '93.188.208.0/21',
-    '178.169.0.0/18',
+    #'178.169.0.0/18',
     '100.64.0.0/10',
 )
 
@@ -208,10 +209,14 @@ def load_prefixes(url):
     result = []
     r = urllib2.Request(url)
     log('Loading prefix-list from ' + url + '.')
-    f = urllib2.urlopen(r).read()
+    try:
+        f = urllib2.urlopen(r).read()
+    except urllib2.HTTPError as e:
+        log('Prefix-list download error: {0}'.format(e.reason))
+        return result
     regexp = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,3}')
     for line in f.split('\n'):
-        result = result + regexp.findall(line)
+        result += regexp.findall(line)
     return result
 
 
@@ -264,6 +269,9 @@ for prefix in own_networks:
 
 log('Write config to {0}'.format(OUTPUT_PATH))
 
-f = open(OUTPUT_PATH, 'w+')
-f.write(acl_config)
-f.close()
+if 'PycharmProject' in os.path.realpath(__file__):
+    print acl_config
+else:
+    f = open(OUTPUT_PATH, 'w+')
+    f.write(acl_config)
+    f.close()
